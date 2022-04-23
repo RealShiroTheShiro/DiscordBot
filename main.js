@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
+//const { MembershipStates } = require('discord.js/typings/enums');
 
-const RebelAFKBot = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
+const RebelAFKBot = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS", "GUILD_PRESENCES"] });
 
 const prefix = '+';
 
@@ -9,7 +10,10 @@ counter = 0;
 
 RebelAFKBot.once('ready', () => {
     //RebelAFKBot.channels.cache.get('967085683799896134').send('IM ALIVE!!!');
+    if(RebelAFKBot.users.cache.get("180066546473762817").presence === 'offline')
+        RebelAFKBot.channels.cache.get('967159078243684405').send('I Entered the IF!');
     console.log('RebelGuyMissingCounter is alive!');
+    RebelAFKBot.channels.cache.get('967159078243684405').send('status -' + RebelAFKBot.users.cache.get("180066546473762817").presence);
 });
 
 
@@ -17,7 +21,7 @@ RebelAFKBot.on('messageCreate', (msg) => {
     // Send back a reply when the specific command has been written by a user.
     if(!msg.content.startsWith(prefix) || msg.author.bot)
     {
-        if(msg.content.toLowerCase().includes('rebel_gay')) 
+        if(msg.content.toLowerCase().includes('gay') || msg.content.toLowerCase().includes('bad') || msg.content.toLowerCase().includes('bozo') || msg.content.toLowerCase().includes('toxic')) 
         {
             msg.reply('no you');
         }
@@ -36,7 +40,7 @@ RebelAFKBot.on('messageCreate', (msg) => {
         if(counting === false)
             msg.channel.send('Im not currently counting.');
         else
-            msg.channel.send('Im currently counting.');
+            msg.channel.send('Rebel_guy has been missing for '+ Math.round(counter/24) + ' days and ' + counter%24 + ' hours!!');
     }
 
     else if(command === 'start')
@@ -50,11 +54,16 @@ RebelAFKBot.on('messageCreate', (msg) => {
         counting = true;
         setInterval(() => {
             counter++;
-            if(counter === 1)
-                msg.channel.send('Rebel has been missing for '+ counter + ' day!!');
+            if(counter%24 === 1)
+                if(Math.round(counter/24) === 1)
+                    msg.channel.send('Rebel has been missing for 1 day and 1 hour!!');
+                else
+                    msg.channel.send('Rebel has been missing for '+ Math.round(counter/24) + ' days and 1 hour!!');
+            else if(Math.round(counter/24) === 1)
+                msg.channel.send('Rebel has been missing for 1 day and '+ counter%24 + ' hours!!');
             else
-            msg.channel.send('Rebel has been missing for '+ counter + ' days!!');
-        }, 8640000);
+                msg.channel.send('Rebel has been missing for '+ Math.round(counter/24) + ' days and ' + counter%24 + ' hours!!');
+        }, 3600000);
 
     }
     else if(command === 'stop')
@@ -81,4 +90,4 @@ RebelAFKBot.on('messageCreate', (msg) => {
 
 
 
-RebelAFKBot.login('OTY3MTU5MzIzODk5ODY3MjM2.YmMPTw.BFiPrUazox39ivc-m39UefF_BPM');
+RebelAFKBot.login('');
