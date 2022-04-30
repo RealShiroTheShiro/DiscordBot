@@ -1,8 +1,9 @@
 const Discord = require('discord.js');
 
 const RebelAFKBot = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS", "GUILD_PRESENCES"] });
-const RebelID = '180899128006410240';
+const RebelID = '180066546473762817';
 const ServerID = '851740488674836520';
+const PostingChannel = '852106496236978236';
 
 const prefix = '+';
 
@@ -21,13 +22,13 @@ RebelAFKBot.once('ready', () => {
             counter++;
             if(counter%24 === 1)
                 if(Math.round(counter/24) === 1)
-                    msg.channel.send('Rebel has been missing for 1 day and 1 hour!!');
+                    RebelAFKBot.guilds.cache.get(ServerID).channels.get(PostingChannel).send('Rebel has been missing for 1 day and 1 hour!!');
                 else
-                    msg.channel.send('Rebel has been missing for '+ Math.round(counter/24) + ' days and 1 hour!!');
+                    RebelAFKBot.guilds.cache.get(ServerID).channels.get(PostingChannel).send('Rebel has been missing for '+ Math.round(counter/24) + ' days and 1 hour!!');
             else if(Math.round(counter/24) === 1)
-                msg.channel.send('Rebel has been missing for 1 day and '+ counter%24 + ' hours!!');
+                RebelAFKBot.guilds.cache.get(ServerID).channels.get(PostingChannel).send('Rebel has been missing for 1 day and '+ counter%24 + ' hours!!');
             else
-                msg.channel.send('Rebel has been missing for '+ Math.round(counter/24) + ' days and ' + counter%24 + ' hours!!');
+                RebelAFKBot.guilds.cache.get(ServerID).channels.get(PostingChannel).send('Rebel has been missing for '+ Math.round(counter/24) + ' days and ' + counter%24 + ' hours!!');
         }, 3600000);
     }
 });
@@ -47,7 +48,6 @@ RebelAFKBot.on('presenceUpdate', (oldPresence, newPresence) => {
             } else if (newPresence.status === "offline") {
                 counting = true;
                 text = "Rebel is offline again...";
-                channel.send("I hope to not see it");
                 setInterval(() => {
                     counter++;
                     if(counter%24 === 1)
@@ -82,11 +82,11 @@ RebelAFKBot.on('messageCreate', (msg) => {
     const args = msg.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
 
-    if(command === 'ping')
+    if(msg.content.startsWith(prefix) && command === 'ping')
     {
         msg.channel.send('pong');
     }
-    else if(command === 'status')
+    else if(msg.content.startsWith(prefix) && command === 'status')
     {
         if(counting === false)
             msg.channel.send('Im not currently counting.');
