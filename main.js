@@ -70,14 +70,14 @@ RebelAFKBot.on('presenceUpdate', (oldPresence, newPresence) => {
 
 RebelAFKBot.on('messageCreate', (msg) => {
     // Send back a reply when the specific command has been written by a user.
-    if(!msg.content.startsWith(prefix) || msg.author.bot)
+/*    if(!msg.content.startsWith(prefix) || msg.author.bot)
     {
         if(msg.content.toLowerCase().includes('gay') || msg.content.toLowerCase().includes('bad') || msg.content.toLowerCase().includes('bozo') || msg.content.toLowerCase().includes('toxic')) 
         {
             msg.reply('no you');
         }
         return;
-    }
+    }*/
 
     const args = msg.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
