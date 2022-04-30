@@ -22,13 +22,13 @@ RebelAFKBot.once('ready', () => {
             counter++;
             if(counter%24 === 1)
                 if(Math.round(counter/24) === 1)
-                    RebelAFKBot.guilds.cache.get(ServerID).channels.get(PostingChannel).send('Rebel has been missing for 1 day and 1 hour!!');
+                    RebelAFKBot.guilds.cache.get(ServerID).channels.cache.get(PostingChannel).send('Rebel has been missing for 1 day and 1 hour!!');
                 else
-                    RebelAFKBot.guilds.cache.get(ServerID).channels.get(PostingChannel).send('Rebel has been missing for '+ Math.round(counter/24) + ' days and 1 hour!!');
+                    RebelAFKBot.guilds.cache.get(ServerID).channels.cache.get(PostingChannel).send('Rebel has been missing for '+ Math.round(counter/24) + ' days and 1 hour!!');
             else if(Math.round(counter/24) === 1)
-                RebelAFKBot.guilds.cache.get(ServerID).channels.get(PostingChannel).send('Rebel has been missing for 1 day and '+ counter%24 + ' hours!!');
+                RebelAFKBot.guilds.cache.get(ServerID).channels.cache.get(PostingChannel).send('Rebel has been missing for 1 day and '+ counter%24 + ' hours!!');
             else
-                RebelAFKBot.guilds.cache.get(ServerID).channels.get(PostingChannel).send('Rebel has been missing for '+ Math.round(counter/24) + ' days and ' + counter%24 + ' hours!!');
+                RebelAFKBot.guilds.cache.get(ServerID).channels.cache.get(PostingChannel).send('Rebel has been missing for '+ Math.round(counter/24) + ' days and ' + counter%24 + ' hours!!');
         }, 3600000);
     }
 });
@@ -37,7 +37,7 @@ RebelAFKBot.on('presenceUpdate', (oldPresence, newPresence) => {
     let member = newPresence.member;
     if (member.id === RebelID) {
         if (oldPresence.status !== newPresence.status) {
-            let channel = member.guild.channels.cache.get('945301031347163147');
+            let channel = member.guild.channels.cache.get(PostingChannel);
 
             let text = "";
 
