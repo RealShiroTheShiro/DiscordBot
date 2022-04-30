@@ -1,7 +1,8 @@
 const Discord = require('discord.js');
-//const { MembershipStates } = require('discord.js/typings/enums');
 
 const RebelAFKBot = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS", "GUILD_PRESENCES"] });
+const RebelID = '563178316362809357';
+const ServerID = '851740488674836520';
 
 const prefix = '+';
 
@@ -9,11 +10,11 @@ counting = false;
 counter = 0;
 
 RebelAFKBot.once('ready', () => {
-    //RebelAFKBot.channels.cache.get('967085683799896134').send('IM ALIVE!!!');
-    if(RebelAFKBot.users.cache.get("180066546473762817").presence === 'offline')
-        RebelAFKBot.channels.cache.get('967159078243684405').send('I Entered the IF!');
     console.log('RebelGuyMissingCounter is alive!');
-    RebelAFKBot.channels.cache.get('967159078243684405').send('status -' + RebelAFKBot.users.cache.get("180066546473762817").presence);
+    if(typeof RebelAFKBot.guilds.cache.get(ServerID).members.cache.get(RebelID).presence?.status == 'undefined')
+        console.log('Rebel_guy is offline.');
+    else
+    console.log('Rebel_guy is ' + RebelAFKBot.guilds.cache.get(ServerID).members.cache.get(RebelID).presence?.status);
 });
 
 
@@ -90,4 +91,4 @@ RebelAFKBot.on('messageCreate', (msg) => {
 
 
 
-RebelAFKBot.login('');
+RebelAFKBot.login('OTY3MTU5MzIzODk5ODY3MjM2.YmMPTw.Jgq5kMt4KixDEeOoHlELd06NdRY');
