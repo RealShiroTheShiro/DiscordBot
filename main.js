@@ -1,19 +1,37 @@
 const Discord = require('discord.js');
+var fs = require('fs');
 
 const RebelAFKBot = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS", "GUILD_PRESENCES"] });
 const RebelID = '180066546473762817';
 const ServerID = '851740488674836520';
 const PostingChannel = '852106496236978236';
+const ShiroID = '100775643465138176';
 
 const prefix = '+';
 
 counting = false;
-counter = 0;
+counter = 397;
 
 RebelAFKBot.once('ready', () => {
     console.log('RebelGuyMissingCounter is alive!');
+
+    var data = fs.readFileSync('./config.json'), counter;
+
+    try {
+    counter = JSON.parse(data);
+    console.dir(counter);
+    }
+    catch (err) {
+    console.log('There has been an error parsing your JSON.')
+    console.log(err);
+    }
+
+
     if(typeof RebelAFKBot.guilds.cache.get(ServerID).members.cache.get(RebelID).presence?.status != 'undefined')
+    {
         console.log('Rebel_guy is ' + RebelAFKBot.guilds.cache.get(ServerID).members.cache.get(RebelID).presence?.status);
+        counter = 0;
+    }
     else
     {
         console.log('Rebel_guy is offline.');
@@ -21,14 +39,14 @@ RebelAFKBot.once('ready', () => {
         setInterval(() => {
             counter++;
             if(counter%24 === 1)
-                if(Math.round(counter/24) === 1)
+                if(Math.floor(counter/24) === 1)
                     RebelAFKBot.guilds.cache.get(ServerID).channels.cache.get(PostingChannel).send('Rebel has been missing for 1 day and 1 hour!!');
                 else
-                    RebelAFKBot.guilds.cache.get(ServerID).channels.cache.get(PostingChannel).send('Rebel has been missing for '+ Math.round(counter/24) + ' days and 1 hour!!');
-            else if(Math.round(counter/24) === 1)
+                    RebelAFKBot.guilds.cache.get(ServerID).channels.cache.get(PostingChannel).send('Rebel has been missing for '+ Math.floor(counter/24) + ' days and 1 hour!!');
+            else if(Math.floor(counter/24) === 1)
                 RebelAFKBot.guilds.cache.get(ServerID).channels.cache.get(PostingChannel).send('Rebel has been missing for 1 day and '+ counter%24 + ' hours!!');
             else
-                RebelAFKBot.guilds.cache.get(ServerID).channels.cache.get(PostingChannel).send('Rebel has been missing for '+ Math.round(counter/24) + ' days and ' + counter%24 + ' hours!!');
+                RebelAFKBot.guilds.cache.get(ServerID).channels.cache.get(PostingChannel).send('Rebel has been missing for '+ Math.floor(counter/24) + ' days and ' + counter%24 + ' hours!!');
         }, 3600000);
     }
 });
@@ -51,14 +69,14 @@ RebelAFKBot.on('presenceUpdate', (oldPresence, newPresence) => {
                 setInterval(() => {
                     counter++;
                     if(counter%24 === 1)
-                        if(Math.round(counter/24) === 1)
+                        if(Math.floor(counter/24) === 1)
                             msg.channel.send('Rebel has been missing for 1 day and 1 hour!!');
                         else
-                            msg.channel.send('Rebel has been missing for '+ Math.round(counter/24) + ' days and 1 hour!!');
-                    else if(Math.round(counter/24) === 1)
+                            msg.channel.send('Rebel has been missing for '+ Math.floor(counter/24) + ' days and 1 hour!!');
+                    else if(Math.floor(counter/24) === 1)
                         msg.channel.send('Rebel has been missing for 1 day and '+ counter%24 + ' hours!!');
                     else
-                        msg.channel.send('Rebel has been missing for '+ Math.round(counter/24) + ' days and ' + counter%24 + ' hours!!');
+                        msg.channel.send('Rebel has been missing for '+ Math.floor(counter/24) + ' days and ' + counter%24 + ' hours!!');
                 }, 3600000);        
             }
 
@@ -91,7 +109,43 @@ RebelAFKBot.on('messageCreate', (msg) => {
         if(counting === false)
             msg.channel.send('Im not currently counting.');
         else
-            msg.channel.send('Rebel_guy has been missing for '+ Math.round(counter/24) + ' days and ' + counter%24 + ' hours!!');
+        {
+            if(counter%24 === 1)
+                if(Math.floor(counter/24) === 1)
+                    msg.channel.send('Rebel has been missing for 1 day and 1 hour!!');
+                else
+                    msg.channel.send('Rebel has been missing for '+ Math.floor(counter/24) + ' days and 1 hour!!');
+            else if(Math.floor(counter/24) === 1)
+                msg.channel.send('Rebel has been missing for 1 day and '+ counter%24 + ' hours!!');
+            else
+                msg.channel.send('Rebel has been missing for '+ Math.floor(counter/24) + ' days and ' + counter%24 + ' hours!!');
+        }
+    }
+    else if(msg.content.startsWith(prefix) && command === 'restart' && msg.author.id === ShiroID)
+    {
+        var data = JSON.stringify(counter);
+
+        fs.writeFile('./config.json', data, function (err) {
+            if (err) {
+              console.log('There has been an error saving your configuration data.');
+              console.log(err.message);
+              return;
+            }
+            console.log('Configuration saved successfully.')
+        });
+
+        msg.channel.send('Restarting, BRB!');
+
+        setTimeout(function () {
+            process.on("exit", function () {
+                require("child_process").spawn(process.argv.shift(), process.argv, {
+                    cwd: process.cwd(),
+                    detached : true,
+                    stdio: "inherit"
+                });
+            });
+            process.exit();
+        }, 5000);
     }
 
  /*   else if(command === 'start')
@@ -106,14 +160,14 @@ RebelAFKBot.on('messageCreate', (msg) => {
         setInterval(() => {
             counter++;
             if(counter%24 === 1)
-                if(Math.round(counter/24) === 1)
+                if(Math.floor(counter/24) === 1)
                     msg.channel.send('Rebel has been missing for 1 day and 1 hour!!');
                 else
-                    msg.channel.send('Rebel has been missing for '+ Math.round(counter/24) + ' days and 1 hour!!');
-            else if(Math.round(counter/24) === 1)
+                    msg.channel.send('Rebel has been missing for '+ Math.floor(counter/24) + ' days and 1 hour!!');
+            else if(Math.floor(counter/24) === 1)
                 msg.channel.send('Rebel has been missing for 1 day and '+ counter%24 + ' hours!!');
             else
-                msg.channel.send('Rebel has been missing for '+ Math.round(counter/24) + ' days and ' + counter%24 + ' hours!!');
+                msg.channel.send('Rebel has been missing for '+ Math.floor(counter/24) + ' days and ' + counter%24 + ' hours!!');
         }, 3600000);
 
     }
@@ -142,4 +196,4 @@ RebelAFKBot.on('messageCreate', (msg) => {
 
 
 
-RebelAFKBot.login('');
+RebelAFKBot.login('OTY3MTU5MzIzODk5ODY3MjM2.YmMPTw.7FjPYtBTTJfbzddo0rImR_9D2bw');
