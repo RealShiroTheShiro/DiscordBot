@@ -1,3 +1,4 @@
+const { exec } = require('child_process');
 const Discord = require('discord.js');
 var fs = require('fs');
 
@@ -134,8 +135,9 @@ RebelAFKBot.on('messageCreate', (msg) => {
             console.log('Configuration saved successfully.')
         });
 
+        exec("git pull");
         msg.channel.send('Restarting, BRB!');
-
+/*
         setTimeout(function () {
             process.on("exit", function () {
                 require("child_process").spawn(process.argv.shift(), process.argv, {
@@ -145,7 +147,7 @@ RebelAFKBot.on('messageCreate', (msg) => {
                 });
             });
             process.exit();
-        }, 5000);
+        }, 5000);*/
     }
 
  /*   else if(command === 'start')
@@ -196,4 +198,4 @@ RebelAFKBot.on('messageCreate', (msg) => {
 
 
 
-RebelAFKBot.login('OTY3MTU5MzIzODk5ODY3MjM2.YmMPTw.7FjPYtBTTJfbzddo0rImR_9D2bw');
+RebelAFKBot.login('OTY3MTU5MzIzODk5ODY3MjM2.GW5tbs._C8ulW0np4RuGnssAse0MXYOHulzUlzbItgD1I');
